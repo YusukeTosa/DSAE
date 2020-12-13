@@ -22,7 +22,7 @@ def random_sampling( images, img_gray , train_num):
 
 
 # フォルダーの画像をランダム位置でクリップした後にリサイズして読み込む
-def make( folder_name="pendulun_pic" , img_size = 240 ,train_num = 300):
+def make( folder_name="pendulun_pic" , img_size = 240 ,train_num = 600):
     train_image = []
     test_image = []
 
@@ -52,7 +52,7 @@ def make( folder_name="pendulun_pic" , img_size = 240 ,train_num = 300):
             print(count_)
         count_ += 1
 
-        if count_ > 300:
+        if count_ > 600:
             break
 
 
@@ -95,6 +95,6 @@ def main(folder_name="pendulun_pic" , img_size = 60):
             print(count_)
         count_ += 1
 
-        if count_ > 300:
+        if count_ > 600:
             break
 

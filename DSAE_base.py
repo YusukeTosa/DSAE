@@ -7,7 +7,7 @@
 import sys
 import math
 import numpy as np
-import tensorflow.compat.v1 as tf
+import tensorflow as tf
 import cv2
 
 import DSAE_pic
@@ -16,7 +16,7 @@ sys.dont_write_bytecode = True
 # from tf_util import Convolution2D
 # from tf_util import FullyConnected
 
-FEATURE = 2
+FEATURE = 1
 np.set_printoptions(threshold=10000)
 
 class Convolution2D :
@@ -144,8 +144,6 @@ class DeepSpatialAutoEncoder:
 
         loss = tf.reduce_sum(tf.square(sv_flatten - decoded))
         
-        # step = tf.Variable(0, trainable=False)
-        # rate = tf.train.exponential_decay(0.0005, step, 1, 0.9999)
         optimizer = tf.train.AdamOptimizer(3e-4)
         targs = []
         for i in range(len(self.convs)) :
@@ -174,9 +172,7 @@ class DeepSpatialAutoEncoder:
         gslow = tf.square( (encoded_next-encoded) )
         loss = tf.reduce_sum( tf.square( i_downsamp_flatten - decoded ) ) + tf.reduce_sum( gslow )
         
-        # step = tf.Variable(0, trainable=False)
-        # rate = tf.train.exponential_decay(0.0005, step, 1, 0.9999)
-        optimizer = tf.train.AdamOptimizer(2e-3)
+        optimizer = tf.train.AdamOptimizer(3e-4)
         targs = []
         for i in range(len(self.convs)) :
             targs.append(self.convs[i].w)
@@ -201,73 +197,25 @@ if __name__=="__main__":
 
     with sess.as_default():
         sess.run(init)
-        for i in range(100):
-            sample_idx = random.choices(range(len(dataset)), k=5)
+        for i in range(200):
+            sample_idx = random.choices(range(len(dataset)), k=6)
             sample_dataset = dataset[sample_idx]
             sample_testset = testset[sample_idx]
             _train_step, loss_,decoded_img_,encoded_, _sv_img = sess.run([train_step, loss,decoded_img,encoded,sv_img], feed_dict={input_data: sample_dataset, label: sample_testset})
             print(loss_)
 
-        sv_img = 255 - np.maximum(0.0, np.array(_sv_img[0].reshape([60, 60])*255.0)).astype(np.uint8)
-        sv_img2 = 255 - np.maximum(0.0, np.array(_sv_img[1].reshape([60, 60])*255.0)).astype(np.uint8)
-        sv_img3 = 255 - np.maximum(0.0, np.array(_sv_img[2].reshape([60, 60])*255.0)).astype(np.uint8)
-        sv_img4 = 255 - np.maximum(0.0, np.array(_sv_img[3].reshape([60, 60])*255.0)).astype(np.uint8)
-        sv_img5 = 255 - np.maximum(0.0, np.array(_sv_img[4].reshape([60, 60])*255.0)).astype(np.uint8)
-
-        out1 = 255 - np.maximum(0.0, np.array(decoded_img_[0].reshape([60, 60])*255.0)).astype(np.uint8)
-        out2 = 255 - np.maximum(0.0, np.array(decoded_img_[1].reshape([60, 60])*255.0)).astype(np.uint8)
-        out3 = 255 - np.maximum(0.0, np.array(decoded_img_[2].reshape([60, 60])*255.0)).astype(np.uint8)
-        out4 = 255 - np.maximum(0.0, np.array(decoded_img_[3].reshape([60, 60])*255.0)).astype(np.uint8)
-        out5 = 255 - np.maximum(0.0, np.array(decoded_img_[4].reshape([60, 60])*255.0)).astype(np.uint8)
-
-        print(encoded_)
-        img = Image.fromarray(out1)
-        svimg = Image.fromarray(sv_img)
-        img.save("output_img/result.png")
-        svimg.save("output_img/sv.png")
-        img = cv2.imread('output_img/result.png')
-        feature = encoded_[0].reshape((-1, 2))
-        for item in feature:
-            img[int(item[0]/2)-1, int(item[1]/2)-1] = 0, 0, 255
-        cv2.imwrite('output_img/edit.png', img)
-
-        img = Image.fromarray(out2)
-        svimg = Image.fromarray(sv_img2)
-        img.save("output_img/tmp.png")
-        svimg.save("output_img/sv2.png")
-        img = cv2.imread('output_img/tmp.png')
-        feature = encoded_[1].reshape((-1, 2))
-        for item in feature:
-            img[int(item[0]/2)-1, int(item[1]/2)-1] = 0, 0, 255
-        cv2.imwrite('output_img/edit2.png', img)
-
-        img = Image.fromarray(out3)
-        svimg = Image.fromarray(sv_img3)
-        img.save("output_img/tmp.png")
-        svimg.save("output_img/sv3.png")
-        img = cv2.imread('output_img/tmp.png')
-        feature = encoded_[2].reshape((-1, 2))
-        for item in feature:
-            img[int(item[0]/2)-1, int(item[1]/2)-1] = 0, 0, 255
-        cv2.imwrite('output_img/edit3.png', img)
-
-        img = Image.fromarray(out4)
-        svimg = Image.fromarray(sv_img4)
-        img.save("output_img/tmp.png")
-        svimg.save("output_img/sv4.png")
-        img = cv2.imread('output_img/tmp.png')
-        feature = encoded_[3].reshape((-1, 2))
-        for item in feature:
-            img[int(item[0]/2)-1, int(item[1]/2)-1] = 0, 0, 255
-        cv2.imwrite('output_img/edit4.png', img)
-
-        img = Image.fromarray(out5)
-        svimg = Image.fromarray(sv_img5)
-        img.save("output_img/tmp.png")
-        svimg.save("output_img/sv5.png")
-        img = cv2.imread('output_img/tmp.png')
-        feature = encoded_[4].reshape((-1, 2))
-        for item in feature:
-            img[int(item[0]/2)-1, int(item[1]/2)-1] = 0, 0, 255
-        cv2.imwrite('output_img/edit5.png', img)
-
+        for i in range(5):
+            sv = 255 - np.maximum(0.0, np.array(_sv_img[i].reshape([60, 60])*255.0)).astype(np.uint8)
+            out = 255 - np.maximum(0.0, np.array(decoded_img_[i].reshape([60, 60])*255.0)).astype(np.uint8)
+            svimg = Image.fromarray(sv)
+            outimg = Image.fromarray(out)
+            svimg.save("output_img/tmp1.png")
+            outimg.save("output_img/tmp2.png")
+            svimg = cv2.imread("output_img/tmp1.png")
+            outimg = cv2.imread('output_img/tmp2.png')
+            feature = encoded_[i].reshape((-1, 2))
+            for item in feature:
+                svimg[int(item[0]/2)-1, int(item[1]/2)-1] = 0, 0, 255
+                outimg[int(item[0]/2)-1, int(item[1]/2)-1] = 0, 0, 255
+            cv2.imwrite('output_img/sv' + str(i+1) + '.png', svimg)
+            cv2.imwrite('output_img/out' + str(i+1) + '.png', outimg)
