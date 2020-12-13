@@ -223,51 +223,51 @@ if __name__=="__main__":
         print(encoded_)
         img = Image.fromarray(out1)
         svimg = Image.fromarray(sv_img)
-        img.save("result.png")
-        svimg.save("sv.png")
-        img = cv2.imread('result.png')
+        img.save("output_img/result.png")
+        svimg.save("output_img/sv.png")
+        img = cv2.imread('output_img/result.png')
         feature = encoded_[0].reshape((-1, 2))
         for item in feature:
             img[int(item[0]/2)-1, int(item[1]/2)-1] = 0, 0, 255
-        cv2.imwrite('edit.png', img)
+        cv2.imwrite('output_img/edit.png', img)
 
         img = Image.fromarray(out2)
         svimg = Image.fromarray(sv_img2)
-        img.save("tmp.png")
-        svimg.save("sv2.png")
-        img = cv2.imread('tmp.png')
+        img.save("output_img/tmp.png")
+        svimg.save("output_img/sv2.png")
+        img = cv2.imread('output_img/tmp.png')
         feature = encoded_[1].reshape((-1, 2))
         for item in feature:
             img[int(item[0]/2)-1, int(item[1]/2)-1] = 0, 0, 255
-        cv2.imwrite('edit2.png', img)
+        cv2.imwrite('output_img/edit2.png', img)
 
         img = Image.fromarray(out3)
         svimg = Image.fromarray(sv_img3)
-        img.save("tmp.png")
-        svimg.save("sv3.png")
-        img = cv2.imread('tmp.png')
+        img.save("output_img/tmp.png")
+        svimg.save("output_img/sv3.png")
+        img = cv2.imread('output_img/tmp.png')
         feature = encoded_[2].reshape((-1, 2))
         for item in feature:
             img[int(item[0]/2)-1, int(item[1]/2)-1] = 0, 0, 255
-        cv2.imwrite('edit3.png', img)
+        cv2.imwrite('output_img/edit3.png', img)
 
         img = Image.fromarray(out4)
         svimg = Image.fromarray(sv_img4)
-        img.save("tmp.png")
-        svimg.save("sv4.png")
-        img = cv2.imread('tmp.png')
+        img.save("output_img/tmp.png")
+        svimg.save("output_img/sv4.png")
+        img = cv2.imread('output_img/tmp.png')
         feature = encoded_[3].reshape((-1, 2))
         for item in feature:
             img[int(item[0]/2)-1, int(item[1]/2)-1] = 0, 0, 255
-        cv2.imwrite('edit4.png', img)
+        cv2.imwrite('output_img/edit4.png', img)
 
         img = Image.fromarray(out5)
         svimg = Image.fromarray(sv_img5)
-        img.save("tmp.png")
-        svimg.save("sv5.png")
-        img = cv2.imread('tmp.png')
+        img.save("output_img/tmp.png")
+        svimg.save("output_img/sv5.png")
+        img = cv2.imread('output_img/tmp.png')
         feature = encoded_[4].reshape((-1, 2))
         for item in feature:
             img[int(item[0]/2)-1, int(item[1]/2)-1] = 0, 0, 255
-        cv2.imwrite('edit5.png', img)
+        cv2.imwrite('output_img/edit5.png', img)
 
